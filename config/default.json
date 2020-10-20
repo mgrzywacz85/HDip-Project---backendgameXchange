@@ -1,0 +1,4 @@
+{
+    "DB_CONNECT": "mongodb+srv://marcin85:marcin85@gamexchange.sqhum.mongodb.net/<dbname>?retryWrites=true&w=majority",
+    "JWT_SECRET": "Marcintokentesting1"
+}
