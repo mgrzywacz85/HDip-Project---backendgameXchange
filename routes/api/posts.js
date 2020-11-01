@@ -3,7 +3,6 @@ const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const auth = require("../../middlewares/auth");
 const User = require("../../models/User");
-const Profile = require("../../models/Profile");
 const Post = require("../../models/Post");
 
 //route:        POST api/posts
@@ -11,7 +10,7 @@ const Post = require("../../models/Post");
 //access:       Private
 router.post(
   "/",
-  [auth, [check("text", "Text is required").not().isEmpty()]],
+  [auth, [check("title", "Title is required").not().isEmpty()]],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -19,13 +18,17 @@ router.post(
     }
 
     try {
-      const user = await User.findById(req.user.id).select("-password");
-
+      const user = await User.findById(req.user.id)
+        .populate("user", "-password");
+     
       const newPost = new Post({
-        text: req.body.text,
+        user: req.user.id,
         name: user.name,
         avatar: user.avatar,
-        user: req.user.id,
+        title: req.body.title,
+        description: req.body.description,
+        photo: req.body.photo,
+        preferredlocation: req.body.preferredlocation  
       });
 
       const post = await newPost.save();
@@ -40,9 +43,9 @@ router.post(
 
 //route:        GET api/posts
 //desc:         Get all posts
-//access:       Private
+//access:       Public
 
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const posts = await Post.find().sort({ date: -1 });
 
@@ -55,9 +58,9 @@ router.get("/", auth, async (req, res) => {
 
 //route:        GET api/posts/:id
 //desc:         Get post by ID
-//access:       Private
+//access:       Public
 
-router.get("/:id", auth, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 

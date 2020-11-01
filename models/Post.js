@@ -5,11 +5,25 @@ const PostSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
   },
-  text: {
+  name: {
+    type: String
+  },
+  title: {
     type: String,
     required: true,
   },
-  name: {
+  description: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  photo: {
+    type: String,
+  },
+  preferredlocation: {
     type: String,
   },
   avatar: {
@@ -44,11 +58,8 @@ const PostSchema = mongoose.Schema({
         default: Date.now,
       },
     },
-  ],
-  date: {
-    type: Date,
-    default: Date.now,
-  },
+  ]
+
 });
 
 module.exports = Post = mongoose.model('post', PostSchema);

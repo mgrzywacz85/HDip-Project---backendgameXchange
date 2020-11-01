@@ -297,7 +297,7 @@ router.put(
     try {
       const profile = await Profile.findOne({ user: req.user.id });
 
-      profile.education.unshift(newEdu); //unchift acts like push but pushes onto the top, most recent is first
+      profile.education.unshift(newEdu); //unshift acts like push but pushes onto the top, most recent is first
 
       await profile.save();
 
