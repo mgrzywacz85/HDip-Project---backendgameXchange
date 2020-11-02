@@ -8,6 +8,10 @@ const PostSchema = mongoose.Schema({
   name: {
     type: String
   },
+  category: {
+    type: String,
+    required: true,
+  },
   title: {
     type: String,
     required: true,
@@ -25,6 +29,7 @@ const PostSchema = mongoose.Schema({
   },
   preferredlocation: {
     type: String,
+    required: true
   },
   avatar: {
     type: String,

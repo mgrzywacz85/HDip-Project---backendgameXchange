@@ -10,7 +10,16 @@ const Post = require("../../models/Post");
 //access:       Private
 router.post(
   "/",
-  [auth, [check("title", "Title is required").not().isEmpty()]],
+  [
+    auth,
+    [
+      check("title", "Title is required").not().isEmpty(),
+      check("description", "Description is required").not().isEmpty(),
+      check("preferredlocation", "Preferred location is required")
+        .not()
+        .isEmpty(),
+    ],
+  ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -18,9 +27,11 @@ router.post(
     }
 
     try {
-      const user = await User.findById(req.user.id)
-        .populate("user", "-password");
-     
+      const user = await User.findById(req.user.id).populate(
+        "user",
+        "-password"
+      );
+
       const newPost = new Post({
         user: req.user.id,
         name: user.name,
@@ -28,7 +39,7 @@ router.post(
         title: req.body.title,
         description: req.body.description,
         photo: req.body.photo,
-        preferredlocation: req.body.preferredlocation  
+        preferredlocation: req.body.preferredlocation,
       });
 
       const post = await newPost.save();
