@@ -36,6 +36,7 @@ router.post(
         user: req.user.id,
         name: user.name,
         avatar: user.avatar,
+        category: req.body.category,
         title: req.body.title,
         description: req.body.description,
         photo: req.body.photo,
