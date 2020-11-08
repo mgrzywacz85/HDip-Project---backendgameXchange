@@ -66,6 +66,10 @@ const PostSchema = mongoose.Schema({
         type: Date,
         default: Date.now,
       },
+      isSelected: {
+        type: Boolean,
+        default: false
+      }
     },
   ]
 

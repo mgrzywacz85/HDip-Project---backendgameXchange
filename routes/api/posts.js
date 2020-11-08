@@ -68,21 +68,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-//route:        GET api/posts
-//desc:         Get posts by category
-//access:       Public
-
-router.get("/cat/", async (req, res) => {
-  try {
-    const posts = await Post.filter(req.params.post)({category: "Playstation 4"}).sort({ date: -1 });
-
-    res.json(posts);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
-});
-
 //route:        GET api/posts/:id
 //desc:         Get post by ID
 //access:       Public
@@ -226,6 +211,7 @@ router.post(
         name: user.name,
         avatar: user.avatar,
         user: req.user.id,
+        isSelected: false
       };
 
       post.comments.unshift(newComment);
@@ -268,7 +254,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
     //Remove
 
     const removeIndex = post.comments
-      .map((comment) => comment.user.toString())
+      .map((comment) => comment.isSelected.toString())
       .indexOf(req.user.id);
 
     post.comments.splice(removeIndex, 1);
@@ -281,5 +267,37 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
     res.status(500).send("Server error");
   }
 });
+
+//route:        PUT api/posts/comment/:post_id/:comment_id/complete
+//desc:         Accept Xchange
+//access:       Private
+
+router.put("/comment/:id/:comment_id/accept", auth, async (req, res) => {
+
+    try {
+
+      const post = await Post.findById(req.params.id);
+
+      //Get comment by id
+  
+      const comment = post.comments.find(
+        (comment) => comment.id === req.params.comment_id
+      );
+
+    //Remove
+
+    post.isCompleted = true;
+
+    comment.isSelected = true;
+
+    await post.save();
+
+      res.json({ profile });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  }
+);
 
 module.exports = router;
