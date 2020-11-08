@@ -34,6 +34,10 @@ const PostSchema = mongoose.Schema({
   avatar: {
     type: String,
   },
+  isCompleted: {
+    type: Boolean,
+    default: false
+  },
   likes: [
     {
       user: {

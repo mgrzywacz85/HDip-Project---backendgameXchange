@@ -40,7 +40,7 @@ router.post(
         title: req.body.title,
         description: req.body.description,
         photo: req.body.photo,
-        preferredlocation: req.body.preferredlocation,
+        preferredlocation: req.body.preferredlocation
       });
 
       const post = await newPost.save();
@@ -60,6 +60,21 @@ router.post(
 router.get("/", async (req, res) => {
   try {
     const posts = await Post.find().sort({ date: -1 });
+
+    res.json(posts);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+//route:        GET api/posts
+//desc:         Get posts by category
+//access:       Public
+
+router.get("/cat/", async (req, res) => {
+  try {
+    const posts = await Post.filter(req.params.post)({category: "Playstation 4"}).sort({ date: -1 });
 
     res.json(posts);
   } catch (err) {
