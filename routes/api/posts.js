@@ -283,16 +283,18 @@ router.put("/comment/:id/:comment_id/accept", auth, async (req, res) => {
       const comment = post.comments.find(
         (comment) => comment.id === req.params.comment_id
       );
-
-    //Remove
-
-    post.isCompleted = true;
+      
+      if (post.user.toString() !== req.user.id) {
+        return res.status(401).json({ msg: "User not authorized" });
+      }
 
     comment.isSelected = true;
 
+    post.isCompleted = true;    
+
     await post.save();
 
-      res.json({ profile });
+      res.json(post);
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server error");
