@@ -290,7 +290,7 @@ router.put("/comment/:id/:comment_id/accept", auth, async (req, res) => {
 
     comment.isSelected = true;
 
-    post.isCompleted = true;    
+    post.isAccepted = true;    
 
     await post.save();
 
@@ -300,6 +300,40 @@ router.put("/comment/:id/:comment_id/accept", auth, async (req, res) => {
       res.status(500).send("Server error");
     }
   }
+);
+
+//route:        PUT api/posts/comment/:post_id/:comment_id/complete
+//desc:         Accept Xchange
+//access:       Private
+
+router.put("/comment/:id/:comment_id/complete", auth, async (req, res) => {
+
+  try {
+
+    const post = await Post.findById(req.params.id);
+
+    //Get comment by id
+
+    const comment = post.comments.find(
+      (comment) => comment.id === req.params.comment_id
+    );
+    
+    if (comment.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "User not authorized" });
+    }
+
+  comment.isSelected = true;
+
+  post.isCompleted = true;    
+
+  await post.save();
+
+    res.json(post);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+}
 );
 
 module.exports = router;

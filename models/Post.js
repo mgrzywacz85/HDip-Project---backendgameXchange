@@ -6,7 +6,7 @@ const PostSchema = mongoose.Schema({
     ref: "users",
   },
   name: {
-    type: String
+    type: String,
   },
   category: {
     type: String,
@@ -29,14 +29,18 @@ const PostSchema = mongoose.Schema({
   },
   preferredlocation: {
     type: String,
-    required: true
+    required: true,
   },
   avatar: {
     type: String,
   },
+  isAccepted: {
+    type: Boolean,
+    default: false,
+  },
   isCompleted: {
     type: Boolean,
-    default: false
+    default: false,
   },
   likes: [
     {
@@ -68,11 +72,10 @@ const PostSchema = mongoose.Schema({
       },
       isSelected: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
     },
-  ]
-
+  ],
 });
 
-module.exports = Post = mongoose.model('post', PostSchema);
+module.exports = Post = mongoose.model("post", PostSchema);
