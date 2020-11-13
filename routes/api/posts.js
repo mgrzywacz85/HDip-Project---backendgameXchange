@@ -214,7 +214,7 @@ router.post(
         isSelected: false
       };
 
-      post.comments.unshift(newComment);
+      post.comments.push(newComment);
 
       await post.save();
 
