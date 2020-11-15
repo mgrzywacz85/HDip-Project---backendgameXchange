@@ -2,18 +2,17 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 
 module.exports = function (req, res, next) {
-  // Get token from header
+  
+  // Ensure Token is not null
 
-  const token = req.header("x-auth-token");
-
-  //Check if not token
+  const token = req.header("x-access-token");
 
   if (!token) {
-    return res.status(401).json({ msg: "No token. Access denied." });
+    return res.status(401).json({ msg: "Token missing. Access denied." });
   }
 
   try {
-    //Decode the token
+    //Decode the received Token
     const decoded = jwt.verify(token, config.get("JWT_SECRET"));
 
     req.user = decoded.user;

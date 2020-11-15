@@ -5,9 +5,10 @@ const auth = require("../../middlewares/auth");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
 
-//route:        POST api/posts
-//desc:         Create a post
-//access:       Private
+//Private
+//Route:        POST api/posts
+//Desc:         Create a post
+     
 router.post(
   "/",
   [
@@ -53,9 +54,9 @@ router.post(
   }
 );
 
+//Public
 //route:        GET api/posts
 //desc:         Get all posts
-//access:       Public
 
 router.get("/", async (req, res) => {
   try {
@@ -68,9 +69,10 @@ router.get("/", async (req, res) => {
   }
 });
 
-//route:        GET api/posts/:id
-//desc:         Get post by ID
-//access:       Public
+//Public
+//Route:        GET api/posts/:id
+//Desc:         Get post by ID
+     
 
 router.get("/:id", async (req, res) => {
   try {
@@ -92,21 +94,22 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-//route:        DELETE api/posts/:id
-//desc:         Delete post by ID
-//access:       Private
+//Private
+//Route:        DELETE api/posts/:id
+//Desc:         Delete post by ID
+     
 
 router.delete("/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    //If the post doesn't exist - handler
+    //Check if Post exists
 
     if (!post) {
       return res.status(404).json({ msg: "Post not found" });
     }
 
-    //Make sure the user who deletes the post is the original poster
+    //Make sure the User deleting the Post is the original poster
 
     if (post.user.toString() !== req.user.id) {
       return res.status(401).json({ msg: "User not authorized" });
@@ -125,15 +128,16 @@ router.delete("/:id", auth, async (req, res) => {
   }
 });
 
-//route:        PUT api/posts/like/:id
-//desc:         Like post
-//access:       Private
+//Private
+//Route:        PUT api/posts/like/:id
+//Desc:         Like post
+    
 
 router.put("/like/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    //Check if already liked by the user
+    //Check if Post already liked by the User
 
     if (
       post.likes.filter((like) => like.user.toString() == req.user.id).length >
@@ -153,17 +157,18 @@ router.put("/like/:id", auth, async (req, res) => {
   }
 });
 
-//route:        PUT api/posts/unlike/:id
-//desc:         Unlike post
-//access:       Private
+//Private
+//Route:        PUT api/posts/unlike/:id
+//Desc:         Unlike post
+   
 
 router.put("/unlike/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    //Check if already liked by the user
+    //Check if already Post already liked by the User
 
-    //if equal to zero then the user has not liked the post yet
+    //If equal to zero then the User has not liked the post yet
 
     if (
       post.likes.filter((like) => like.user.toString() == req.user.id)
@@ -189,9 +194,10 @@ router.put("/unlike/:id", auth, async (req, res) => {
   }
 });
 
-//route:        POST api/posts/comment/:post_id
-//desc:         Comment on a post
-//access:       Private
+//Private
+//Route:        POST api/posts/comment/:post_id
+//Desc:         Comment on a post
+      
 router.post(
   "/comment/:id",
   [auth, [check("text", "Text is required").not().isEmpty()]],
@@ -226,9 +232,10 @@ router.post(
   }
 );
 
-//route:        DELETE api/posts/comment/:post_id/:comment_id
-//desc:         Delete comment from post
-//access:       Private
+//Private
+//Route:        DELETE api/posts/comment/:post_id/:comment_id
+//Desc:         Delete comment from post
+      
 
 router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
   try {
@@ -240,13 +247,13 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
       (comment) => comment.id === req.params.comment_id
     );
 
-    //Check if comment exists
+    //Check if Comment exists
 
     if (!comment) {
       return res.status(404).json({ msg: "Comment does not exist" });
     }
 
-    //Check user
+    //Check if valid User is making the request
     if (comment.user.toString() !== req.user.id) {
       return res.status(401).json({ msg: "User not authorized" });
     }
@@ -268,9 +275,9 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
   }
 });
 
-//route:        PUT api/posts/comment/:post_id/:comment_id/complete
-//desc:         Accept Xchange
-//access:       Private
+//Private
+//Route:        PUT api/posts/comment/:post_id/:comment_id/complete
+//Desc:         Accept Xchange (put in Pending state)       
 
 router.put("/comment/:id/:comment_id/accept", auth, async (req, res) => {
 
@@ -302,9 +309,10 @@ router.put("/comment/:id/:comment_id/accept", auth, async (req, res) => {
   }
 );
 
+//Private
 //route:        PUT api/posts/comment/:post_id/:comment_id/complete
-//desc:         Accept Xchange
-//access:       Private
+//desc:         Complete Xchange (the selected Commenter chooses this - put in Successful state)
+   
 
 router.put("/comment/:id/:comment_id/complete", auth, async (req, res) => {
 

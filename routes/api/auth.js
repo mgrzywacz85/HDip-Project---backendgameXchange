@@ -7,9 +7,10 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
-//route:        GET api/auth
-//desc:         Authentication
-//access:       Private
+//Private
+//Route:        GET api/auth
+//Desc:         Authentication
+    
 router.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
@@ -20,14 +21,15 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-//route:        POST api/auth
-//desc:         Authenticate user and get token
-//access:       Public
+//Public
+//Route:        POST api/auth
+//Desc:         Authenticate user and get token
+   
 router.post(
   "/",
   [
-    check("email", "Please enter a valid e-mail").isEmail(),
-    check("password", "Password is required").exists(),
+    check("email", "Please provide a valid e-mail").isEmail(),
+    check("password", "Please provide your password").exists(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -35,7 +37,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password } = req.body; //destructuring from req.body
+    const { email, password } = req.body;
 
     try {
       //Check if the user exists
@@ -44,7 +46,7 @@ router.post(
       if (!user) {
         return res
           .status(400)
-          .json({ errors: [{ msg: "Invalid credentials" }] });
+          .json({ errors: [{ msg: "Please provide valid credentials" }] });
       }
 
       //Check if password matches
@@ -54,7 +56,7 @@ router.post(
       if (!isMatch) {
         return res
           .status(400)
-          .json({ errors: [{ msg: "Invalid credentials" }] });
+          .json({ errors: [{ msg: "Please provide valid credentials" }] });
       }
 
       //Return the JWT token to allow for immediate login after registration
@@ -68,12 +70,12 @@ router.post(
       jwt.sign(
         payload,
         config.get("JWT_SECRET"),
-        { expiresIn: 3600000 },
+        { expiresIn: 3600 },
         (err, token) => {
           if (err) throw err;
           res.json({ token });
         }
-      ); //revert to 3600 seconds for Prod
+      ); 
     } catch (err) {
       console.error(err.message);
       res.status(500).send("5XX server error");
