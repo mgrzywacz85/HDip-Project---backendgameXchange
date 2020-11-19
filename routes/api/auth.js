@@ -17,13 +17,13 @@ router.get("/", auth, async (req, res) => {
     res.json(user);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error from Auth path");
+    res.status(500).send("Server Error / Auth");
   }
 });
 
 //Public
 //Route:        POST api/auth
-//Desc:         Authenticate user and get token
+//Desc:         Authenticate User and get token
    
 router.post(
   "/",
@@ -40,7 +40,9 @@ router.post(
     const { email, password } = req.body;
 
     try {
-      //Check if the user exists
+
+      //Check if the User exists
+      
       let user = await User.findOne({ email });
 
       if (!user) {
@@ -78,7 +80,7 @@ router.post(
       ); 
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("5XX server error");
+      res.status(500).send("Server Error / Auth");
     }
   }
 );

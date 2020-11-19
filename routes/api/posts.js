@@ -49,7 +49,7 @@ router.post(
       res.json(post);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send("Server Error");
     }
   }
 );
@@ -65,7 +65,7 @@ router.get("/", async (req, res) => {
     res.json(posts);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).send("Server Error");
   }
 });
 
@@ -90,7 +90,7 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ msg: "Post not found" });
     }
 
-    res.status(500).send("Server error");
+    res.status(500).send("Server Error");
   }
 });
 
@@ -124,7 +124,7 @@ router.delete("/:id", auth, async (req, res) => {
     if (err.kind === "ObjectId") {
       return res.status(404).json({ msg: "Post not found" });
     }
-    res.status(500).send("Server error");
+    res.status(500).send("Server Error");
   }
 });
 
@@ -153,7 +153,7 @@ router.put("/like/:id", auth, async (req, res) => {
     res.json(post.likes);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).send("Server Error");
   }
 });
 
@@ -190,7 +190,7 @@ router.put("/unlike/:id", auth, async (req, res) => {
     res.json(post.likes);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).send("Server Error");
   }
 });
 
@@ -227,7 +227,7 @@ router.post(
       res.json(post.comments);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send("Server Error");
     }
   }
 );
@@ -271,7 +271,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
     res.json(post.comments);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).send("Server Error");
   }
 });
 
@@ -304,7 +304,7 @@ router.put("/comment/:id/:comment_id/accept", auth, async (req, res) => {
       res.json(post);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send("Server Error");
     }
   }
 );
@@ -320,7 +320,7 @@ router.put("/comment/:id/:comment_id/complete", auth, async (req, res) => {
 
     const post = await Post.findById(req.params.id);
 
-    //Get comment by id
+    //Get comment by ID
 
     const comment = post.comments.find(
       (comment) => comment.id === req.params.comment_id
@@ -339,7 +339,7 @@ router.put("/comment/:id/:comment_id/complete", auth, async (req, res) => {
     res.json(post);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).send("Server Error");
   }
 }
 );

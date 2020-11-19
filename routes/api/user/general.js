@@ -31,7 +31,8 @@ router.post(
     const { name, email, avatar, password } = req.body; //destructuring from req.body
 
     try {
-      //Check if the user already exists
+
+      //Check if the User already exists
 
       let user = await User.findOne({ email });
 
